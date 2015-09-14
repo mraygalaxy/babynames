@@ -36,6 +36,7 @@ def say(req, what="NOTHING"):
 
 syllables = re_compile(r'[a,e,i,o,y]+', flags=re_IGNORECASE)
 blacklist = []
+whitelist = {}
 
 fh = open("blacklist.txt", 'r')
 while True :
@@ -43,6 +44,14 @@ while True :
    if not expr :
        break
    blacklist.append(re_compile(r'' + expr, flags=re_IGNORECASE))
+fh.close()
+
+fh = open("whitelist.txt", 'r')
+while True :
+   expr = fh.readline().strip()
+   if not expr :
+       break
+   whitelist[expr] = True
 fh.close()
 
 def whittle(name) :
@@ -121,6 +130,11 @@ for kind in sys.argv[1:] :
         print "Longest is: " + str(longest)
     
         for prefix_key in lengths[longest].keys() :
+            if prefix_key in whitelist :
+                print "Already whitelisted: " + prefix_key
+                del prefixes[prefix_key] 
+                continue
+
             for name in pnames[prefix_key] :
                 print "  " + name
             print "Keep: " + prefix_key + ": " + str(lengths[longest][prefix_key]) + " (y/N) ?"
@@ -132,6 +146,9 @@ for kind in sys.argv[1:] :
 
                 if yesno.strip().lower() == "y" :
                     print "Keeping."
+                    fh = open("whitelist.txt", 'a')
+                    fh.write(prefix_key + "\n")
+                    fh.close()
                     break
 
                 print "Blacklisting."
