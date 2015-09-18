@@ -112,6 +112,12 @@ for kind in sys.argv[1:] :
                     pnames[prefix].append(name)
     fh.close()
     print(str(len(names)) + " names left")
+
+    fh = open(kind + ".txt.out", 'w') 
+    for name in names :
+        fh.write(name + "\n")
+    fh.close()
+
     while True :
         longest = -1
         lengths = {}
@@ -127,11 +133,10 @@ for kind in sys.argv[1:] :
         if longest == -1 :
             break
 
-        print "Longest is: " + str(longest)
-    
+        #print "Longest is: " + str(longest)
         for prefix_key in lengths[longest].keys() :
             if prefix_key in whitelist :
-                print "Already whitelisted: " + prefix_key
+                #print "Already whitelisted: " + prefix_key
                 del prefixes[prefix_key] 
                 continue
 
@@ -157,8 +162,3 @@ for kind in sys.argv[1:] :
                 fh.close()
 
             del prefixes[prefix_key] 
-
-    fh = open(kind + ".txt.out", 'w') 
-    for name in names :
-        fh.write(name + "\n")
-    fh.close()
