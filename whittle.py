@@ -134,31 +134,37 @@ for kind in sys.argv[1:] :
             break
 
         #print "Longest is: " + str(longest)
-        for prefix_key in lengths[longest].keys() :
-            if prefix_key in whitelist :
-                #print "Already whitelisted: " + prefix_key
-                del prefixes[prefix_key] 
-                continue
+        for prefix_key_start in lengths[longest].keys() :
+            for kidx in range(len(prefix_key_start), 0, -1) :
+                prefix_key = prefix_key_start[:kidx]
+                length = len(prefix_key)
+                if length not in lengths or prefix_key not in lengths[length] or prefix_key not in prefixes :
+                    continue
 
-            for name in pnames[prefix_key] :
-                print "  " + name
-            print "Keep: " + prefix_key + ": " + str(lengths[longest][prefix_key]) + " (y/N) ?"
-            # Ask if this prefix is good and if not
-            # add it to the blacklist
-            for yesno in sys.stdin.readline() :
-                if not yesno :
-                    break
+                if prefix_key in whitelist :
+                    #print "Already whitelisted: " + prefix_key
+                    del prefixes[prefix_key] 
+                    continue
 
-                if yesno.strip().lower() == "y" :
-                    print "Keeping."
-                    fh = open("whitelist.txt", 'a')
-                    fh.write(prefix_key + "\n")
+                for name in pnames[prefix_key] :
+                    print "  " + name
+                print "Keep: " + prefix_key + ": " + str(lengths[length][prefix_key]) + " (y/N) ?"
+                # Ask if this prefix is good and if not
+                # add it to the blacklist
+                for yesno in sys.stdin.readline() :
+                    if not yesno :
+                        break
+
+                    if yesno.strip().lower() == "y" :
+                        print "Keeping."
+                        fh = open("whitelist.txt", 'a')
+                        fh.write(prefix_key + "\n")
+                        fh.close()
+                        break
+
+                    print "Blacklisting."
+                    fh = open("blacklist.txt", 'a')
+                    fh.write("^" + prefix_key + "\n")
                     fh.close()
-                    break
 
-                print "Blacklisting."
-                fh = open("blacklist.txt", 'a')
-                fh.write("^" + prefix_key + "\n")
-                fh.close()
-
-            del prefixes[prefix_key] 
+                del prefixes[prefix_key] 
