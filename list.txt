@@ -22,7 +22,7 @@ cadence
 kelis
 aria
 erin
-Lindsey
+lindsey
 mesh
 theory
 joss
@@ -66,7 +66,20 @@ moria
 park
 morgan
 susan
+bianca
+dawn
+miriam
+mina
+dominique
+daphne
+sydney
+sophia
+erin
+joyce
+ramani
 
+avery
+joseph
 morgan
 journey
 light
@@ -100,3 +113,6 @@ sidne (like sydney)
 drew
 isaac
 aidin
+jordan
+adam
+sydney
